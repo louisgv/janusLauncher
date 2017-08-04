@@ -46,6 +46,10 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## References:
 
-+ [Open Image dataset](https://github.com/openimages/datasethttps://github.com/openimages/dataset)
++ [How to Write Custom Launcher App in Android by Arnab Chakraborty](http://arnab.ch/blog/2013/08/how-to-write-custom-launcher-app-in-android/)
 
-+ [CPP Basic Project](https://github.com/marinsky/cpp_basic_project_setup)
+---
+
+## License:
+
+MIT
