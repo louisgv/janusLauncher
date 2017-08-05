@@ -2,6 +2,21 @@
 
 ---
 
+# Using delegate to lazy load things
+2017-08-05T06:24:12.300Z
+
+Working with Android suffers from ancient artifact such as manually handling delegate/promise/asynchronous/background process. To see Kotlin can actually handle this case is a great sign.
+
+Prior in Java, one would have to cache the result of a background call, then check for the cached result in subsequence render.
+
+In Kotlin, the same mechanism is almost impossible, since it does not allow lateinit field that is nullable. However, using a delegate, the cache could be loaded inside the delegate lambda itself. Thus, inside the background loader callback, one can simply return the delegate.
+
+Checkout AppsLoader for a demonstration.
+
+[Kotlin Delegated Properties](https://kotlinlang.org/docs/reference/delegated-properties.html)
+
+---
+
 # Android SDK update quirk on system low on tmp
 
 My laptop was running low on storage when attempting to upgrade android SDK. Indeed the partition used for tmp was only 1.5GB freed. The solution to this was quite simple. I simply create a tmp directory in another partition, or even external storage drive. Then simply remove the `/tmp` directory with root, then symlink the new `/tmp` like so:
@@ -22,15 +37,3 @@ sudo mkdir /tmp
 sudo chmod 777 /tmp
 sudo reboot
 ```
-
----
-
-# Using delegate to lazy load things
-
-Working with Android suffers from ancient artifact such as manually handling delegate/promise/asynchronous/background process. To see Kotlin can actually handle this case is a great sign.
-
-Prior in Java, one would have to cache the result of a background call, then check for the cached result in subsequence render.
-
-In Kotlin, the same mechanism is almost impossible, since it does not allow lateinit field that is nullable. However, using a delegate, the cache could be loaded inside the delegate lambda itself. Thus, inside the background loader callback, one can simply return the delegate.
-
-Checkout AppsLoader for a demonstration.

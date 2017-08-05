@@ -11,8 +11,9 @@ The goal of Janus is to be a launcher that is:
 ## Prerequisite
 
 Building Janus requires:
-	+ Android Studio Canary ("Android 3" as of 2017-08-03)
-	+ git
+
+- Android Studio Canary ("Android 3" as of 2017-08-05T06:25:29.933Z)
+- git
 
 ---
 
@@ -47,6 +48,7 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## References:
 
++ [Build a custom launcher on Android by Ashraff Hathibelagal](https://code.tutsplus.com/tutorials/build-a-custom-launcher-on-android--cms-21358)
 + [How to Write Custom Launcher App in Android by Arnab Chakraborty](http://arnab.ch/blog/2013/08/how-to-write-custom-launcher-app-in-android/)
 
 ---

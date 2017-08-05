@@ -23,7 +23,7 @@ class AppsLoader (context: Context) :
                 .map { app -> AppModel(context, app) }
                 .toTypedArray()
     }
-    
+
     override fun loadInBackground(): Array<AppModel> {
         return mInstalledApps
     }
