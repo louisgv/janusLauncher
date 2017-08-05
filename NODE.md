@@ -22,3 +22,15 @@ sudo mkdir /tmp
 sudo chmod 777 /tmp
 sudo reboot
 ```
+
+---
+
+# Using delegate to lazy load things
+
+Working with Android suffers from ancient artifact such as manually handling delegate/promise/asynchronous/background process. To see Kotlin can actually handle this case is a great sign.
+
+Prior in Java, one would have to cache the result of a background call, then check for the cached result in subsequence render.
+
+In Kotlin, the same mechanism is almost impossible, since it does not allow lateinit field that is nullable. However, using a delegate, the cache could be loaded inside the delegate lambda itself. Thus, inside the background loader callback, one can simply return the delegate.
+
+Checkout AppsLoader for a demonstration.

@@ -3,7 +3,6 @@ package com.blueberry.lab.januslauncher
 import android.content.AsyncTaskLoader
 import android.content.Context
 import android.content.pm.PackageManager
-import kotlin.properties.Delegates
 
 /**
  * Created by jojo on 8/3/17.
@@ -24,8 +23,7 @@ class AppsLoader (context: Context) :
                 .map { app -> AppModel(context, app) }
                 .toTypedArray()
     }
-
-
+    
     override fun loadInBackground(): Array<AppModel> {
         return mInstalledApps
     }
