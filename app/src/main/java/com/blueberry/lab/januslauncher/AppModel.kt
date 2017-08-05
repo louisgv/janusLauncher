@@ -1,3 +1,5 @@
+package com.blueberry.lab.januslauncher
+
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.graphics.drawable.Drawable
