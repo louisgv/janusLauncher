@@ -12,3 +12,9 @@ pip install numpy sklearn pandas jupyter notebook tensorflow
 pip install -r ../model/requirements.txt
 
 cd ../model
+
+curl https://cloudstor.aarnet.edu.au/plus/index.php/s/7YXcasTXp727EqB/download -o data.zip
+
+unzip data.zip
+rm data.zip
+mv matlab data

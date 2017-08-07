@@ -48,6 +48,7 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## Announcements
 
++ 2017-08-07T05:16:44.862Z: Initialize tensorflow project with readme and notes
 + 2017-08-06T23:37:54.234Z: Refactor into a monorepo project with two module, one for launcher and one for the model.
 + 2017-08-05T05:41:49.454Z: Launcher with apps initialized
 + 2017-08-03T06:48:30.239Z: Initialize the project
@@ -56,6 +57,8 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## References:
 
++ [EMNIST github repository](https://github.com/Coopss/EMNIST)
++ [EMNIST paper](https://arxiv.org/abs/1702.05373)
 + [Build a custom launcher on Android by Ashraff Hathibelagal](https://code.tutsplus.com/tutorials/build-a-custom-launcher-on-android--cms-21358)
 + [How to Write Custom Launcher App in Android by Arnab Chakraborty](http://arnab.ch/blog/2013/08/how-to-write-custom-launcher-app-in-android/)
 

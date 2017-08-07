@@ -13,7 +13,29 @@ If what we seek is the finalization of the module, then the name of each module 
 The second convention seems to fit this line of reasoning. We will name the first, `launcher`, the second `model`.
 
 ---
-# Setup an OK python hacking environment for TensorFlow
+# Setup EMNIST data to be used with the training scripts
+
+Since my hard-drive is limited in space, I had to store EMNIST on an external drive. After which, I would do a symbolic link. There're a couple of quirk. Here's the command that was giving me trouble:
+
+```
+cd path/to/matlab-parent
+ln -s matlab/ ~/pro/janusLauncher/model/data
+```
+
+The symlink was created successfully, but I cannot get inside through the symlink. Searching around, and found this hilarious thread: [link](http://www.linuxquestions.org/questions/linux-newbie-8/invalid-cross-device-link-731268/). However, it wasn't very related.
+
+Then I realized that the path was wrong. In order to make a soft symlink, you must use absolute path. Here's the working command:
+
+```
+ln -s $PWD/matlab/ ~/pro/janusLauncher/model/data
+```
+
+That is, if you cloned this project into `~/pro`
+
+To those who have spaces in their hard-drive, the setup script provided should download the dataset automatically for you. Feel free to port it over to other env.
+
+---
+# Setup an OK python hacking environment for Machine Learning
 
 1. Install `python3.5` and `pip3.5`, use them, set them default.
 
@@ -28,10 +50,10 @@ The second convention seems to fit this line of reasoning. We will name the firs
 ```
 	- Refresh shell config: `source ~/.zshrc`
 	- `mkvirtualenv tensorhack`
-	- `pip install numpy sklearn pandas jupyter notebook tensorflow`
+	- `pip install numpy sklearn pandas jupyter notebook tensorflow scipy`
 
 4. Learn the following `pip` command:
-	- `pip freeze > requirements.txt`
+	- `pip freeze --local > requirements.txt`
 	- `pip install -r requirements.txt`
 
 5. Whenever you see a python Tensorflow project, use `workon tensorhack` and you are mostly set.
