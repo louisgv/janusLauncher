@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-sudo apt install python3.5 pip3.5
+sudo apt install python3
 
 sudo pip3 install virtualenv virtualenvwrapper
 

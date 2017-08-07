@@ -25,7 +25,7 @@ Building Janus requires:
 	- Download and setup Android Studio Canary:  [link](https://developer.android.com/studio/preview/index.html)
  	- Open the android studio project in `/launcher`
 
-2. The model modlule
+2. The model module
 
 	- Setup `tensorhack` as described in `NOTE`
 	- Play with stuffs in `model`
