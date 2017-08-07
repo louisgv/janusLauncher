@@ -1,5 +1,41 @@
 # The source structure
 
+The project at the moment consists of 2 modules:
++ The android app itself made with Kotlin
++ The Tensorflow project to generate and train a model for letter recognition
+
+In order to minimize friction when it comes to initialize the project, and since the project is quite small, it is reasonable to refactor it into a monorepo structure.
+
+We will have 2 packages, one per module. The naming of these module however, can follow two convention. Either we name them based on their technology, e.g android-app and tensorflow-[...] <- the last bit would be quite challenging to name. We can name it "model-maker", "project", etc... but it will not feel right. Furthermore, this highlight the technology, but not the purpose of the module.
+
+If what we seek is the finalization of the module, then the name of each module should emphasize its purpose, not the technology. As we must use any technology available to achieve the goal.
+
+The second convention seems to fit this line of reasoning. We will name the first, `launcher`, the second `model`.
+
+---
+# Setup an OK python hacking environment for TensorFlow
+
+1. Install `python3.5` and `pip3.5`, use them, set them default.
+
+2. Install `virtual-env` and `virtualenvwrapper`
+	- `pip3.5 install virtual-env virtualenvwrapper`
+
+3. Setup `virtualenvwrapper` and create a new environment called `tensorhack`:
+	- Add the code below to your shell startup:
+```sh
+	export WORKON_HOME=$HOME/.virtualenvs
+	source /usr/local/bin/virtualenvwrapper.sh
+```
+	- Refresh shell config: `source ~/.zshrc`
+	- `mkvirtualenv tensorhack`
+	- `pip install numpy sklearn pandas jupyter notebook tensorflow`
+
+4. Learn the following `pip` command:
+	- `pip freeze > requirements.txt`
+	- `pip install -r requirements.txt`
+
+5. Whenever you see a python Tensorflow project, use `workon tensorhack` and you are mostly set.
+
 ---
 
 # Using delegate to lazy load things

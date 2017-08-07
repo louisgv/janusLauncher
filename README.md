@@ -12,16 +12,24 @@ The goal of Janus is to be a launcher that is:
 
 Building Janus requires:
 
-- Android Studio Canary ("Android 3" as of 2017-08-05T06:25:29.933Z)
 - git
+- Android Studio Canary ("Android 3" as of 2017-08-05T06:25:29.933Z)
+- python3.5 & pip
+
 
 ---
 
 # Setup
 
-1. Download and setup Android Studio Canary:  [link](https://developer.android.com/studio/preview/index.html)
+1. The launcher module
 
-2. Open this project
+	- Download and setup Android Studio Canary:  [link](https://developer.android.com/studio/preview/index.html)
+ 	- Open the android studio project in `/launcher`
+
+2. The model modlule
+
+	- Setup `pip`
+
 
 ---
 
@@ -41,6 +49,7 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## Announcements
 
++ 2017-08-06T23:37:54.234Z: Refactor into a monorepo project with two module, one for launcher and one for the model.
 + 2017-08-05T05:41:49.454Z: Launcher with apps initialized
 + 2017-08-03T06:48:30.239Z: Initialize the project
 
