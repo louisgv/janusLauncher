@@ -18,7 +18,7 @@ The second convention seems to fit this line of reasoning. We will name the firs
 1. Install `python3.5` and `pip3.5`, use them, set them default.
 
 2. Install `virtual-env` and `virtualenvwrapper`
-	- `pip3.5 install virtual-env virtualenvwrapper`
+	- `sudo pip3 install virtualenv virtualenvwrapper`
 
 3. Setup `virtualenvwrapper` and create a new environment called `tensorhack`:
 	- Add the code below to your shell startup:
@@ -35,6 +35,8 @@ The second convention seems to fit this line of reasoning. We will name the firs
 	- `pip install -r requirements.txt`
 
 5. Whenever you see a python Tensorflow project, use `workon tensorhack` and you are mostly set.
+
+6. For convenience, I created a script to run all of this for Debian distro running `zsh` in `./scripts/setup.zsh`. `chmod +x` it and run. Feel free to port it to other env/shell.
 
 ---
 

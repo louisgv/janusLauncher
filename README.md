@@ -14,8 +14,7 @@ Building Janus requires:
 
 - git
 - Android Studio Canary ("Android 3" as of 2017-08-05T06:25:29.933Z)
-- python3.5 & pip
-
+- python3, pip3, virtualenv, virtualenvwrapper (Check NOTE)
 
 ---
 
@@ -28,8 +27,8 @@ Building Janus requires:
 
 2. The model modlule
 
-	- Setup `pip`
-
+	- Setup `tensorhack` as described in `NOTE`
+	- Play with stuffs in `model`
 
 ---
 
