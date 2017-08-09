@@ -1,5 +1,6 @@
 data
 bin/
+Graph/
 # Created by https://www.gitignore.io/api/python
 
 ### Python ###
