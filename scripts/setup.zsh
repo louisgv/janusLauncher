@@ -18,3 +18,5 @@ curl https://cloudstor.aarnet.edu.au/plus/index.php/s/7YXcasTXp727EqB/download -
 unzip data.zip
 rm data.zip
 mv matlab data
+
+jt -t onedork -fs 144 -altp -tfs 11 -nfs 115 -cellw 88%

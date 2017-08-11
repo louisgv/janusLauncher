@@ -57,6 +57,7 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## References:
 
++ [Creating a- deep learning ios-app with keras and tensorflow by @stratospark](http://blog.stratospark.com/creating-a-deep-learning-ios-app-with-keras-and-tensorflow.html)
 + [EMNIST github repository](https://github.com/Coopss/EMNIST)
 + [EMNIST paper](https://arxiv.org/abs/1702.05373)
 + [Build a custom launcher on Android by Ashraff Hathibelagal](https://code.tutsplus.com/tutorials/build-a-custom-launcher-on-android--cms-21358)
