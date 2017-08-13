@@ -15,6 +15,12 @@ import android.widget.ListView
 class AppListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<AppModel>> {
     lateinit var mAdapter : AppListAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+    }
+
     override fun onLoaderReset(p0: Loader<Array<AppModel>>?) {
         mAdapter.clear()
     }
@@ -43,6 +49,7 @@ class AppListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<AppM
         if (isResumed) setListShown(true)
         else setListShownNoAnimation(true)
     }
+
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         val app = listAdapter.getItem(position) as? AppModel ?: return

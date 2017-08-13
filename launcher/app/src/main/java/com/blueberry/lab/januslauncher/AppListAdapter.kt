@@ -15,7 +15,7 @@ import android.widget.TextView
 class AppListAdapter (context : Context)
     : ArrayAdapter<AppModel> (context, R.layout.list_item) {
 
-    val inflater : LayoutInflater = LayoutInflater.from(context)
+    val inflater = LayoutInflater.from(context)!!
 
     fun setData(data: Array<AppModel>?) {
         clear()

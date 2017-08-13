@@ -13,6 +13,13 @@ If what we seek is the finalization of the module, then the name of each module 
 The second convention seems to fit this line of reasoning. We will name the first, `launcher`, the second `model`.
 
 ---
+# Activities
+
+1. Main activity: Has drawing pad, and a partial list of things. Maybe for first the list will from user marking for favorite
+2. List activity: Has the full list
+
+
+---
 # Setup EMNIST data to be used with the training scripts
 
 Since my hard-drive is limited in space, I had to store EMNIST on an external drive. After which, I would do a symbolic link. There're a couple of quirk. Here's the command that was giving me trouble:
