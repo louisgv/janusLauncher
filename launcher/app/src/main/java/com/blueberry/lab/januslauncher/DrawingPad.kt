@@ -1,10 +1,7 @@
 package com.blueberry.lab.januslauncher
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
 
@@ -85,6 +82,9 @@ class DrawingPad(context: Context) : View(context) {
             }
 
             else -> {
+                // Get bitmap
+                val bitmap = Bitmap.createBitmap(drawingCache)
+
                 StrokeUtils.addStroke()
 
                 if (StrokeUtils.shouldCleanUp()) {
