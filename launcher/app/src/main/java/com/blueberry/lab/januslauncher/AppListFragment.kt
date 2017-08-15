@@ -15,6 +15,8 @@ import android.widget.ListView
 class AppListFragment : ListFragment(), LoaderManager.LoaderCallbacks<List<AppModel>> {
     lateinit var appListAdapter: AppListAdapter
 
+    lateinit var listOfAppModels: List<AppModel>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -42,6 +44,8 @@ class AppListFragment : ListFragment(), LoaderManager.LoaderCallbacks<List<AppMo
     }
 
     override fun onLoadFinished(loader: Loader<List<AppModel>>?, apps: List<AppModel>?) {
+        listOfAppModels = apps!!
+
         appListAdapter.setData(apps)
 
         if (isResumed) setListShown(true)

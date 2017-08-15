@@ -20,7 +20,7 @@ class AppListAdapter (context : Context)
     fun setData(data: List<AppModel>?) {
         clear()
         if (data != null) {
-            addAll(data.toMutableList())
+            addAll(data)
         }
     }
 

@@ -34,8 +34,9 @@ class MainActivity : FragmentActivity() {
     }
 
     fun onQueryChanged(filterString: String): Unit {
-        val filteredListOfAppModels = AppsLoader(appListFragment.activity).listOfAppModels
+        val filteredListOfAppModels = appListFragment.listOfAppModels
                 .filter { appModel -> appModel.label.contains(filterString, ignoreCase = true) }
+                .sortedWith(compareBy { appModel -> appModel.label.indexOf(filterString) })
 
         appListFragment.appListAdapter.setData(filteredListOfAppModels)
     }
