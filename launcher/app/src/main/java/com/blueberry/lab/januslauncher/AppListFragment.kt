@@ -12,17 +12,15 @@ import android.widget.ListView
  * Created by jojo on 8/4/17.
  */
 
-class AppListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<AppModel>> {
-    lateinit var mAdapter : AppListAdapter
+class AppListFragment : ListFragment(), LoaderManager.LoaderCallbacks<List<AppModel>> {
+    lateinit var appListAdapter: AppListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
-    override fun onLoaderReset(p0: Loader<Array<AppModel>>?) {
-        mAdapter.clear()
+    override fun onLoaderReset(p0: Loader<List<AppModel>>?) {
+        appListAdapter.clear()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -30,26 +28,25 @@ class AppListFragment : ListFragment(), LoaderManager.LoaderCallbacks<Array<AppM
 
         setEmptyText("LOADING APPLICATIONS...")
 
-        mAdapter = AppListAdapter(activity)
+        appListAdapter = AppListAdapter(activity)
 
-        listAdapter = mAdapter
+        listAdapter = appListAdapter
 
         setListShown(false)
 
         loaderManager.initLoader(0, null, this)
     }
 
-    override fun onCreateLoader(p0: Int, p1: Bundle?): Loader<Array<AppModel>> {
+    override fun onCreateLoader(p0: Int, p1: Bundle?): Loader<List<AppModel>> {
         return AppsLoader(activity)
     }
 
-    override fun onLoadFinished(loader: Loader<Array<AppModel>>?, apps: Array<AppModel>?) {
-        mAdapter.setData(apps)
+    override fun onLoadFinished(loader: Loader<List<AppModel>>?, apps: List<AppModel>?) {
+        appListAdapter.setData(apps)
 
         if (isResumed) setListShown(true)
         else setListShownNoAnimation(true)
     }
-
 
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         val app = listAdapter.getItem(position) as? AppModel ?: return

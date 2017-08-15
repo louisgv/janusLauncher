@@ -2,47 +2,46 @@ package com.blueberry.lab.januslauncher
 
 import android.content.AsyncTaskLoader
 import android.content.Context
-import android.content.pm.PackageManager
 
 /**
  * Created by jojo on 8/3/17.
  */
-class AppsLoader (context: Context) :
-    AsyncTaskLoader<Array<AppModel>>(context){
+class AppsLoader(context: Context) :
+        AsyncTaskLoader<List<AppModel>>(context) {
 
-    val packageManager : PackageManager = context.packageManager
+    val packageManager = context.packageManager!!
 
-    val mInstalledApps : Array<AppModel> by lazy <Array<AppModel>>{
+    // To be used for filtering
+    val listOfAppModels by lazy(LazyThreadSafetyMode.NONE) {
         val apps = packageManager.getInstalledApplications(0) ?: emptyList()
 
-        if (apps.isEmpty()) return@lazy emptyArray()
+        if (apps.isEmpty()) return@lazy emptyList<AppModel>()
 
         return@lazy apps
                 .filter { app -> packageManager.getLaunchIntentForPackage(app.packageName) != null }
-                .sortedWith(compareBy{ app -> app.packageName })
                 .map { app -> AppModel(context, app) }
-                .toTypedArray()
+                .sortedWith(compareBy { appModel -> appModel.label.toString().toLowerCase() })
     }
 
-    override fun loadInBackground(): Array<AppModel> {
-        return mInstalledApps
+    override fun loadInBackground(): List<AppModel> {
+        return this.listOfAppModels
     }
 
     override fun onStartLoading() {
-        if (takeContentChanged() || mInstalledApps.isEmpty() ) {
+        if (takeContentChanged() || this.listOfAppModels.isEmpty()) {
             // If the data has changed since the last time it was loaded
             // or is not currently available, start a load.
             forceLoad()
         }
 
-        if (mInstalledApps.isNotEmpty()) {
+        if (this.listOfAppModels.isNotEmpty()) {
             // If we currently have a result available, deliver it
             // immediately.
-            deliverResult(mInstalledApps)
+            deliverResult(this.listOfAppModels)
         }
     }
 
-    override fun deliverResult(apps: Array<AppModel>?) {
+    override fun deliverResult(apps: List<AppModel>?) {
         if (isReset) {
             // An async query came in while the loader is stopped.  We
             // don't need the result.
@@ -67,7 +66,7 @@ class AppsLoader (context: Context) :
         }
     }
 
-    private fun onReleaseResources(apps: Array<AppModel>) {
+    private fun onReleaseResources(apps: List<AppModel>) {
         // do nothing
     }
 }

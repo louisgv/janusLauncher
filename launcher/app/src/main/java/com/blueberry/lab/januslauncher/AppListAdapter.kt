@@ -17,7 +17,7 @@ class AppListAdapter (context : Context)
 
     val inflater = LayoutInflater.from(context)!!
 
-    fun setData(data: Array<AppModel>?) {
+    fun setData(data: List<AppModel>?) {
         clear()
         if (data != null) {
             addAll(data.toMutableList())
@@ -31,7 +31,7 @@ class AppListAdapter (context : Context)
         val item = getItem(position)
 
         view.findViewById<ImageView>(R.id.item_app_icon).setImageDrawable(item.icon)
-        view.findViewById<TextView>(R.id.item_app_label).text = item.appLabel
+        view.findViewById<TextView>(R.id.item_app_label).text = item.label
 
         return view
     }

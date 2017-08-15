@@ -12,7 +12,7 @@ import java.io.File
 open class AppModel (context: Context, appInfo: ApplicationInfo) {
     val packageName : String = appInfo.packageName
 
-    val appLabel : CharSequence = appInfo.loadLabel(context.packageManager)
+    val label: CharSequence = appInfo.loadLabel(context.packageManager)
 
     val apkFile : File = File(appInfo.sourceDir)
 
