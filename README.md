@@ -48,6 +48,7 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## Announcements
 
++ 2017-08-15T05:41:05.891Z: App filtering added
 + 2017-08-13T02:36:29.212Z: Drawing pad added
 + 2017-08-07T05:16:44.862Z: Initialize tensorflow project with readme and notes
 + 2017-08-06T23:37:54.234Z: Refactor into a monorepo project with two module, one for launcher and one for the model.
