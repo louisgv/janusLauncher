@@ -8,14 +8,19 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.RelativeLayout
+import java.util.*
 
 class MainActivity : FragmentActivity() {
 
-    lateinit var pad : DrawingPad
-    lateinit var appListFragment : AppListFragment
-    lateinit var appListQueryEdit : EditText
+    lateinit var pad: DrawingPad
+    lateinit var appListFragment: AppListFragment
+    lateinit var appListQueryEdit: EditText
 
-    val padParams = RelativeLayout.LayoutParams(
+    var previousQuery: String = ""
+
+    private val stackOfFilteredListOfAppModels = Stack<List<AppModel>>()
+
+    private val padParams = RelativeLayout.LayoutParams(
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
     )
@@ -30,13 +35,26 @@ class MainActivity : FragmentActivity() {
 
         appListQueryEdit = findViewById(R.id.app_list_query_edit)
 
-        appListQueryEdit.addTextChangedListener {onQueryChanged(it)}
+        appListQueryEdit.addTextChangedListener { onQueryChanged(it) }
     }
 
-    fun onQueryChanged(filterString: String): Unit {
-        val filteredListOfAppModels = appListFragment.listOfAppModels
-                .filter { appModel -> appModel.label.contains(filterString, ignoreCase = true) }
-                .sortedWith(compareBy { appModel -> appModel.label.indexOf(filterString) })
+    private fun onQueryChanged(query: String) {
+        if (previousQuery.isEmpty() && stackOfFilteredListOfAppModels.isEmpty()) {
+            stackOfFilteredListOfAppModels.push(appListFragment.listOfAppModels)
+        }
+
+        val filteredListOfAppModels = if (previousQuery.length < query.length) {
+            stackOfFilteredListOfAppModels.push(
+                    stackOfFilteredListOfAppModels.peek()
+                        .filter { appModel -> appModel.label.contains(query, ignoreCase = true) }
+                        .sortedWith(compareBy { appModel -> appModel.label.indexOf(query) })
+            )
+        } else {
+            stackOfFilteredListOfAppModels.pop()
+            stackOfFilteredListOfAppModels.peek()
+        }
+
+        previousQuery = query
 
         appListFragment.appListAdapter.setData(filteredListOfAppModels)
     }

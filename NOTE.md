@@ -13,6 +13,84 @@ If what we seek is the finalization of the module, then the name of each module 
 The second convention seems to fit this line of reasoning. We will name the first, `launcher`, the second `model`.
 
 ---
+# Setup Bazel and Tensorflow optimization for some TF tools
+
+```
+mkdir ~/src
+cd ~/src
+wget https://github.com/bazelbuild/bazel/releases/download/0.5.3/bazel-0.5.3-dist.zip
+
+unzip bazel-0.5.3-dist.zip -d bazel
+cd bazel
+./compile.sh
+
+# Open new terminal
+cd ~/src
+gcl git@github.com:tensorflow/tensorflow.git
+cd tensorflow
+./configure
+
+# WHEN bazel compile is done, switch back to that terminal
+mv output/bazel ~/bin/bazel
+
+# Add ~/bin to your PATH if you haven't.
+chmod +x ~/bin/bazel
+
+# Test bazel:
+bazel version
+
+# Switch to tensorflow terminal
+
+bazel build tensorflow/tools/graph_transforms:transform_graph
+bazel build tensorflow/tools/graph_transforms:summarize_graph
+bazel build tensorflow/contrib/util:convert_graphdef_memmapped_format
+```
+
+The tools are built. Now we just need to use them on the `graph.pb` to transform it accordingly:
+
+
+```
+# Go to the model module
+cd /path/to/janusLauncher/model
+
+# Use summarize_graph tool to optimize the graph size. The graph should shrink by ~0.1MB
+
+~/src/tensorflow/bazel-bin/tensorflow/tools/graph_transforms/summarize_graph --in_graph=graph.pb
+
+~/src/tensorflow/bazel-bin/tensorflow/tools/graph_transforms/transform_graph \
+--in_graph=graph.pb \
+--out_graph=opt_graph.pb \
+--inputs='input_1' \
+--outputs='Softmax' \
+--transforms='strip_unused_nodes(type=float, shape="1,299,299,3") remove_nodes(op=Identity, op=CheckNumerics) round_weights(num_steps=256) fold_constants(ignore_errors=true) fold_batch_norms fold_old_batch_norms'
+
+~/src/tensorflow/bazel-bin/tensorflow/tools/graph_transforms/transform_graph \
+--in_graph=opt_graph.pb \
+--out_graph=shrink_graph.pb \
+--inputs='input_1' \
+--outputs='Softmax' \
+--transforms='quantize_weights strip_unused_nodes'
+
+~/src/tensorflow/bazel-bin/tensorflow/contrib/util/convert_graphdef_memmapped_format --in_graph=opt_graph.pb --out_graph=mem_graph.pb
+
+```
+
+---
+# transform_graph
+
+Seems like the inputs and outpus are wrong....
+
+```
+2017-08-19 13:09:41.584398: I tensorflow/tools/graph_transforms/transform_graph.cc:264] Applying strip_unused_nodes
+
+2017-08-19 13:09:41.603677: E tensorflow/tools/graph_transforms/transform_graph.cc:210] Input node Softmax not found in graph
+
+2017-08-19 13:09:41.604259: E tensorflow/tools/graph_transforms/transform_graph.cc:211] usage: /home/jojo/src/tensorflow/bazel-bin/tensorflow/tools/graph_transforms/transform_graph
+```
+
+The 2nd line seems to indicate that all input need to match somehow
+
+---
 # Activities
 
 1. Main activity: Has drawing pad, and a partial list of things. Maybe for first the list will from user marking for favorite
@@ -51,6 +129,7 @@ To those who have spaces in their hard-drive, the setup script provided should d
 
 3. Setup `virtualenvwrapper` and create a new environment called `tensorhack`:
 	- Add the code below to your shell startup:
+
 ```sh
 	export WORKON_HOME=$HOME/.virtualenvs
 	source /usr/local/bin/virtualenvwrapper.sh

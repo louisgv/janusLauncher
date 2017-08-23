@@ -9,10 +9,10 @@ import android.content.Context
 class AppsLoader(context: Context) :
         AsyncTaskLoader<List<AppModel>>(context) {
 
-    val packageManager = context.packageManager!!
+    private val packageManager = context.packageManager!!
 
     // To be used for filtering
-    val listOfAppModels by lazy(LazyThreadSafetyMode.NONE) {
+    private val listOfAppModels by lazy(LazyThreadSafetyMode.NONE) {
         val apps = packageManager.getInstalledApplications(0) ?: emptyList()
 
         if (apps.isEmpty()) return@lazy emptyList<AppModel>()
@@ -50,8 +50,6 @@ class AppsLoader(context: Context) :
             }
         }
 
-        val oldApps = apps
-
         if (isStarted) {
             // If the Loader is currently started, we can immediately
             // deliver its results.
@@ -61,8 +59,8 @@ class AppsLoader(context: Context) :
         // At this point we can release the resources associated with
         // 'oldApps' if needed; now that the new result is delivered we
         // know that it is no longer in use.
-        if (oldApps != null) {
-            onReleaseResources(oldApps)
+        if (apps != null) {
+            onReleaseResources(apps)
         }
     }
 

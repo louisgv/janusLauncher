@@ -59,6 +59,7 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## References:
 
++ [Deploying a tensorflow model to android](https://medium.com/joytunes/deploying-a-tensorflow-model-to-android-69d04d1b0cba)
 + [Basic Painting with Views](https://github.com/codepath/android_guides/wiki/Basic-Painting-with-Views)
 + [Creating a- deep learning ios-app with keras and tensorflow by @stratospark](http://blog.stratospark.com/creating-a-deep-learning-ios-app-with-keras-and-tensorflow.html)
 + [EMNIST github repository](https://github.com/Coopss/EMNIST)

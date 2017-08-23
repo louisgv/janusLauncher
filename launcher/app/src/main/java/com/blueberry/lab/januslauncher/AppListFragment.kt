@@ -2,7 +2,6 @@ package com.blueberry.lab.januslauncher
 
 import android.app.ListFragment
 import android.app.LoaderManager
-import android.content.Intent
 import android.content.Loader
 import android.os.Bundle
 import android.view.View
@@ -55,7 +54,7 @@ class AppListFragment : ListFragment(), LoaderManager.LoaderCallbacks<List<AppMo
     override fun onListItemClick(l: ListView?, v: View?, position: Int, id: Long) {
         val app = listAdapter.getItem(position) as? AppModel ?: return
 
-        val intent = activity.packageManager.getLaunchIntentForPackage(app.packageName) as? Intent ?: return
+        val intent = activity.packageManager.getLaunchIntentForPackage(app.packageName) ?: return
 
         startActivity(intent)
     }

@@ -5,23 +5,24 @@ import android.graphics.*
 import android.view.MotionEvent
 import android.view.View
 
+
 /**
  * Created by jojo on 8/11/17.
  */
 
 class DrawingPad(context: Context) : View(context) {
 
-    val resetInterval : Long = 1800
+    private val resetInterval : Long = 1800
 
-    val resetRunnable = Runnable {
+    private val resetRunnable = Runnable {
         run {
             reset()
         }
     }
 
     companion object StrokeUtils {
-        val MAXIMUM_STROKE = 9
-        var currentStrokeCount = 0
+        private val MAXIMUM_STROKE = 9
+        private var currentStrokeCount = 0
 
         fun addStroke(): Unit {
             currentStrokeCount++
@@ -38,7 +39,7 @@ class DrawingPad(context: Context) : View(context) {
 
     val path = Path()
 
-    val paint = Paint()
+    private val paint = Paint()
 
     init {
         isClickable = false
@@ -59,7 +60,7 @@ class DrawingPad(context: Context) : View(context) {
         canvas.drawPath(path, paint)
     }
 
-    fun reset(){
+    private fun reset(){
         StrokeUtils.reset()
         path.reset()
         postInvalidate()
@@ -84,6 +85,8 @@ class DrawingPad(context: Context) : View(context) {
             else -> {
                 // Get bitmap
                 val bitmap = Bitmap.createBitmap(drawingCache)
+
+
 
                 StrokeUtils.addStroke()
 
