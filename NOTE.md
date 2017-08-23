@@ -182,4 +182,11 @@ sudo rm /tmp
 sudo mkdir /tmp
 sudo chmod 777 /tmp
 sudo reboot
+
 ```
+
+# Consuming TF model in Android
+cd path/to/janusLauncher
+# Make sure you train the model and generate the graph
+cp model/graph.pb launcher/app/src/main/assets
+

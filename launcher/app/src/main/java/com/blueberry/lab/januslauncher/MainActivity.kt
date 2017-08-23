@@ -66,7 +66,7 @@ class MainActivity : FragmentActivity() {
             MotionEvent.ACTION_MOVE -> {
                 super.dispatchTouchEvent(event)
                 return false
-            }
+            }ay
         }
 
         return super.dispatchTouchEvent(event)
