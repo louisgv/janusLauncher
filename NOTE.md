@@ -186,7 +186,26 @@ sudo reboot
 ```
 
 # Consuming TF model in Android
+
+```sh
 cd path/to/janusLauncher
 # Make sure you train the model and generate the graph
 cp model/graph.pb launcher/app/src/main/assets
+```
 
+# Generating the label file
+
+Regarding tutorial online that one can duck on the subject of "Tensorflow" and "Andoid/IOS", there are two sets of tutorial. The first dive deeply into acquiring the dataset, creating the script to train a model, and stop at testing the model and gathering the best confidence. The second goes through the pipeline of integrating a fully-trained model into an app, which goes from acquiring a pre-trained model, then implement the Tensorflow API on the mobile platform, then showcasing the result.
+
+There is a gap between these two tutorial. The gap is hidden under the technical and thus is very easy for both segment of the tutorial author to miss. That is, the produced model of the first, is not compatible with the model used at the start of the second.
+
+There are several tutorial, amongst them by stratospark, which looked into converting the finalized model into a graph object using TF. This is great. However, when it comes to classifying problem like EMNIST, there need a label file. We call it `label.txt`
+
+Ducking for `label.txt` yield some example:
+
+https://github.com/ageron/handson-ml/blob/master/datasets/inception/imagenet_class_names.txt
+https://github.com/mari-linhares/mnist-android-tensorflow/blob/master/MnistAndroid/app/src/main/assets/labels.txt
+
+It seems to be just a text file of all the available label. Which makes one wonder if that is all is needed, a text file of all label. The question is, in what order should these label lay? Is there a format, or just put them in? Is there a need to preprocess the label?
+
+Turned out, the consuming code from the Android side does shed some light on this matter. The label file if found, will be read line by line by a BufferedReader. For each line, it simply add it to the label _Vector_. The use o the vector class seems to indicate that the order does not matter, and that we should be able to create the label file for our model in a very straight forward manner.

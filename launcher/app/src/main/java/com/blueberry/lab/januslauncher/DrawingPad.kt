@@ -12,6 +12,8 @@ import android.view.View
 
 class DrawingPad(context: Context) : View(context) {
 
+    lateinit var bitmap : Bitmap
+
     private val resetInterval : Long = 1800
 
     private val resetRunnable = Runnable {
@@ -37,7 +39,7 @@ class DrawingPad(context: Context) : View(context) {
         }
     }
 
-    val path = Path()
+    private val path = Path()
 
     private val paint = Paint()
 
@@ -84,9 +86,7 @@ class DrawingPad(context: Context) : View(context) {
 
             else -> {
                 // Get bitmap
-                val bitmap = Bitmap.createBitmap(drawingCache)
-
-
+                bitmap = Bitmap.createBitmap(drawingCache)
 
                 StrokeUtils.addStroke()
 

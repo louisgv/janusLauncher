@@ -8,15 +8,25 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.RelativeLayout
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.util.*
 
+
 class MainActivity : FragmentActivity() {
+
+    private val INPUT_SIZE = 224
+    private val IMAGE_MEAN = 117
+    private val IMAGE_STD = 1f
+    private val INPUT_NAME = "input"
+    private val OUTPUT_NAME = "output"
+
+    private val LABEL_FILE = "file:///android_asset/labels.txt"
+    private val MODEL_FILE = "file:///android_asset/graph.pb"
 
     lateinit var pad: DrawingPad
     lateinit var appListFragment: AppListFragment
     lateinit var appListQueryEdit: EditText
-
-    var previousQuery: String = ""
 
     private val stackOfFilteredListOfAppModels = Stack<List<AppModel>>()
 
@@ -24,6 +34,10 @@ class MainActivity : FragmentActivity() {
             RelativeLayout.LayoutParams.WRAP_CONTENT,
             RelativeLayout.LayoutParams.WRAP_CONTENT
     )
+
+    private lateinit var classifier : TensorFlowEMNISTClassifier
+
+    private var previousQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +50,17 @@ class MainActivity : FragmentActivity() {
         appListQueryEdit = findViewById(R.id.app_list_query_edit)
 
         appListQueryEdit.addTextChangedListener { onQueryChanged(it) }
+
+        classifier = TensorFlowEMNISTClassifier(
+                assets,
+                MODEL_FILE,
+                LABEL_FILE,
+                INPUT_SIZE,
+                IMAGE_MEAN,
+                IMAGE_STD,
+                INPUT_NAME,
+                OUTPUT_NAME
+        )
     }
 
     private fun onQueryChanged(query: String) {
@@ -62,14 +87,26 @@ class MainActivity : FragmentActivity() {
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         pad.onDrawing(event)
 
+        val originalResult = super.dispatchTouchEvent(event)
+
         when (event.action) {
             MotionEvent.ACTION_MOVE -> {
-                super.dispatchTouchEvent(event)
                 return false
+            }
+
+            MotionEvent.ACTION_UP -> {
+                doAsync {
+                    val results = classifier.recognizeImage(pad.bitmap)
+
+                    val bestPredicted = results[0].title
+                    uiThread {
+                        onQueryChanged(previousQuery + bestPredicted)
+                    }
+                 }
             }
         }
 
-        return super.dispatchTouchEvent(event)
+        return originalResult
     }
 
     /**
