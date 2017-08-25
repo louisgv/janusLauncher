@@ -47,7 +47,7 @@ class MainActivity : FragmentActivity() {
             stackOfFilteredListOfAppModels.push(
                     stackOfFilteredListOfAppModels.peek()
                         .filter { appModel -> appModel.label.contains(query, ignoreCase = true) }
-                        .sortedWith(compareBy { appModel -> appModel.label.indexOf(query) })
+                        .sortedWith(compareBy { appModel -> -appModel.label.indexOf(query) })
             )
         } else {
             stackOfFilteredListOfAppModels.pop()
@@ -66,7 +66,7 @@ class MainActivity : FragmentActivity() {
             MotionEvent.ACTION_MOVE -> {
                 super.dispatchTouchEvent(event)
                 return false
-            }ay
+            }
         }
 
         return super.dispatchTouchEvent(event)
