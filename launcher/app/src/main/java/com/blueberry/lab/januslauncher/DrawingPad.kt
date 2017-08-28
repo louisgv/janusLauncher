@@ -11,10 +11,12 @@ import android.view.View
  */
 
 class DrawingPad(context: Context) : View(context) {
+    private val RESET_INTERVAL: Long = 1800
 
-    lateinit var bitmap : Bitmap
+    private val MODEL_SIZE = 28
 
-    private val resetInterval : Long = 1800
+    private val canvasMatrix = Matrix()
+    private val invertedCanvasMatrix = Matrix()
 
     private val resetRunnable = Runnable {
         run {
@@ -26,7 +28,7 @@ class DrawingPad(context: Context) : View(context) {
         private val MAXIMUM_STROKE = 9
         private var currentStrokeCount = 0
 
-        fun addStroke(): Unit {
+        fun addStroke() {
             currentStrokeCount++
         }
 
@@ -34,7 +36,7 @@ class DrawingPad(context: Context) : View(context) {
             return currentStrokeCount > MAXIMUM_STROKE
         }
 
-        fun reset(): Unit {
+        fun reset() {
             currentStrokeCount = 0
         }
     }
@@ -46,29 +48,60 @@ class DrawingPad(context: Context) : View(context) {
     init {
         isClickable = false
         isFocusable = false
-        isFocusableInTouchMode= false
-
+        isFocusableInTouchMode = false
 
         isDrawingCacheEnabled = true
+
         paint.color = Color.DKGRAY
         paint.isAntiAlias = true
         paint.strokeWidth = 18f
         paint.style = Paint.Style.STROKE
         paint.strokeJoin = Paint.Join.BEVEL
         paint.strokeCap = Paint.Cap.ROUND
+
+        val width = width.toFloat()
+        val height = height.toFloat()
+
+        // Model (bitmap) size
+        val modelWidth = MODEL_SIZE
+        val modelHeight = MODEL_SIZE
+
+        val scaleW = width / modelWidth
+        val scaleH = height / modelHeight
+
+        var scale = scaleW
+        if (scale > scaleH) {
+            scale = scaleH
+        }
+
+        val newCx = modelWidth * scale / 2
+        val newCy = modelHeight * scale / 2
+        val dx = width / 2 - newCx
+        val dy = height / 2 - newCy
+
+        canvasMatrix.setScale(scale, scale)
+        canvasMatrix.postTranslate(dx, dy)
+        canvasMatrix.invert(invertedCanvasMatrix)
     }
 
-    override fun onDraw(canvas: Canvas) {
-        canvas.drawPath(path, paint)
+    fun getBitmap() : Bitmap {
+        val bitmap = Bitmap.createBitmap(MODEL_SIZE, MODEL_SIZE, Bitmap.Config.ARGB_8888)
+        val processingCanvas = Canvas(bitmap)
+        processingCanvas.drawPath(path, paint)
+        return bitmap
     }
 
-    private fun reset(){
+    override fun onDraw(renderCanvas: Canvas) {
+        renderCanvas.drawPath(path, paint)
+    }
+
+    private fun reset() {
         StrokeUtils.reset()
         path.reset()
         postInvalidate()
     }
 
-    fun onDrawing(event: MotionEvent?): Unit {
+    fun onDrawing(event: MotionEvent?) {
         val x = event!!.x
         val y = event.y
         when (event.action) {
@@ -77,7 +110,7 @@ class DrawingPad(context: Context) : View(context) {
 
                 handler.removeCallbacks(resetRunnable)
 
-                handler.postDelayed(resetRunnable, resetInterval)
+                handler.postDelayed(resetRunnable, RESET_INTERVAL)
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -86,8 +119,6 @@ class DrawingPad(context: Context) : View(context) {
 
             else -> {
                 // Get bitmap
-                bitmap = Bitmap.createBitmap(drawingCache)
-
                 StrokeUtils.addStroke()
 
                 if (StrokeUtils.shouldCleanUp()) {

@@ -19,7 +19,7 @@ class MainActivity : FragmentActivity() {
     private val IMAGE_MEAN = 117
     private val IMAGE_STD = 1f
     private val INPUT_NAME = "main_input"
-    private val OUTPUT_NAME = "main_output"
+    private val OUTPUT_NAME = "main_output/Softmax"
 
     private val MODEL_FILE = "file:///android_asset/graph.pb"
     private val LABEL_FILE = "file:///android_asset/labels.txt"
@@ -96,13 +96,13 @@ class MainActivity : FragmentActivity() {
 
             MotionEvent.ACTION_UP -> {
                 doAsync {
-                    val results = classifier.recognizeImage(pad.bitmap)
+                    val results = classifier.recognizeImage(pad.getBitmap())
 
                     val bestPredicted = results[0].title
                     uiThread {
                         onQueryChanged(previousQuery + bestPredicted)
                     }
-                 }
+                }
             }
         }
 
