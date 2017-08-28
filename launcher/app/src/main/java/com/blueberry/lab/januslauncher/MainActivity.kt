@@ -21,8 +21,8 @@ class MainActivity : FragmentActivity() {
     private val INPUT_NAME = "input"
     private val OUTPUT_NAME = "output"
 
-    private val LABEL_FILE = "file:///android_asset/labels.txt"
     private val MODEL_FILE = "file:///android_asset/graph.pb"
+    private val LABEL_FILE = "file:///android_asset/labels.txt"
 
     lateinit var pad: DrawingPad
     lateinit var appListFragment: AppListFragment

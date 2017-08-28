@@ -59,6 +59,9 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## References:
 
++ [Keras Pull request on exporting a model](https://github.com/fchollet/keras/pull/6074/files)
++ [Keras API guide](https://keras.io/getting-started/functional-api-guide/)
++ [Generate alphabet codegolf](https://codegolf.stackexchange.com/questions/15882/generate-alphabet-with-4-copies-of-each-letter)
 + [Deploying a tensorflow model to android](https://medium.com/joytunes/deploying-a-tensorflow-model-to-android-69d04d1b0cba)
 + [Basic Painting with Views](https://github.com/codepath/android_guides/wiki/Basic-Painting-with-Views)
 + [Creating a- deep learning ios-app with keras and tensorflow by @stratospark](http://blog.stratospark.com/creating-a-deep-learning-ios-app-with-keras-and-tensorflow.html)
@@ -66,6 +69,8 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 + [EMNIST paper](https://arxiv.org/abs/1702.05373)
 + [Build a custom launcher on Android by Ashraff Hathibelagal](https://code.tutsplus.com/tutorials/build-a-custom-launcher-on-android--cms-21358)
 + [How to Write Custom Launcher App in Android by Arnab Chakraborty](http://arnab.ch/blog/2013/08/how-to-write-custom-launcher-app-in-android/)
++ Cohen, G., Afshar, S., Tapson, J., & van Schaik, A. (2017). EMNIST: an extension of MNIST to handwritten letters. Retrieved from http://arxiv.org/abs/1702.05373 (link is external)
+
 
 ---
 
