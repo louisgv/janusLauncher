@@ -105,3 +105,4 @@ ENV/
 
 # End of https://www.gitignore.io/api/python
 graph.pb
+freeze/

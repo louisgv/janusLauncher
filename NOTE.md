@@ -209,3 +209,24 @@ https://github.com/mari-linhares/mnist-android-tensorflow/blob/master/MnistAndro
 It seems to be just a text file of all the available label. Which makes one wonder if that is all is needed, a text file of all label. The question is, in what order should these label lay? Is there a format, or just put them in? Is there a need to preprocess the label?
 
 Turned out, the consuming code from the Android side does shed some light on this matter. The label file if found, will be read line by line by a BufferedReader. For each line, it simply add it to the label _Vector_. The use o the vector class seems to indicate that the order does not matter, and that we should be able to create the label file for our model in a very straight forward manner.
+
+# Finding the input node and output node name of a TF model
+
+This is quite tricky. After several trial and realization, the steps are as follow:
+First when constructing the model, name the input and output so that it is easier to identify them. In janus, input are named `main_input` and output `main_output`
+
+Now, after the model has been trained, the input name will stays intact, but the output name will be modified, and you will have to search for it. Look at the very last operator of the model. For janus, it is
+
+```
+output = kl.Dense(nb_classes, activation='softmax', name='main_output')(hidden)
+```
+
+The operator is Dense, but the activation function is softmax. In order to use the `transform_graph` program with the model, we need to find the name of this node. If you outputed the graph.pbtxt you are in luck. Since it is just a giant json file, grepping it for the output node is doable. However, doing so will only give you instances of the `main_output` string, but not the name of the node.
+
+In order to find node name, simply `grep name` like so:
+```sh
+cd model/freeze
+cat graph.pbtxt | grep name
+```
+
+The output will be a list of node name. Now you will just need to find a node with a name related to main_output with softmax. For Janus, it is indeed `main_output/Softmax`
