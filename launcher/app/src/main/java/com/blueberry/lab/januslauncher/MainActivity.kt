@@ -19,7 +19,7 @@ class MainActivity : FragmentActivity() {
     private val INPUT_SIZE = 224
     private val IMAGE_MEAN = 117
     private val IMAGE_STD = 1f
-    private val INPUT_NAME = "batch_normalization_1/keras_learning_phase"
+    private val INPUT_NAME = "main_input"
     private val OUTPUT_NAME = "main_output/Softmax"
 
     private val MODEL_FILE = "file:///android_asset/graph.pb"

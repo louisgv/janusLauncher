@@ -231,4 +231,11 @@ cat graph.pbtxt | grep name
 
 The output will be a list of node name. Now you will just need to find a node with a name related to main_output with softmax. For Janus, it is indeed `main_output/Softmax`
 
-TODO: REMOVE FUCKING BATCH  NORMALIZATION!
+# Converting the model to be usable on Mobile
+
+Turn Switch to Identity
+	Merge node? Or just do the Switch->Identity for now...
+
+Remove all drop-out node
+
+Use transform graph tool to specify only 1 input and 1 output
