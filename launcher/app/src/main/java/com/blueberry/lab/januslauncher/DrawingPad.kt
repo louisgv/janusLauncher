@@ -6,6 +6,10 @@ import android.view.MotionEvent
 import android.view.View
 
 
+
+
+
+
 /**
  * Created by jojo on 8/11/17.
  */
@@ -17,6 +21,7 @@ class DrawingPad(context: Context) : View(context) {
 
     private val canvasMatrix = Matrix()
     private val invertedCanvasMatrix = Matrix()
+    private val scaleMatrix = Matrix()
 
     private val resetRunnable = Runnable {
         run {
@@ -41,9 +46,12 @@ class DrawingPad(context: Context) : View(context) {
         }
     }
 
-    private val path = Path()
+    private val renderPath = Path()
+    private val renderPaint = Paint()
 
-    private val paint = Paint()
+    private val processingPath = Path()
+    private val processingPaint = Paint()
+
 
     init {
         isClickable = false
@@ -52,52 +60,47 @@ class DrawingPad(context: Context) : View(context) {
 
         isDrawingCacheEnabled = true
 
-        paint.color = Color.DKGRAY
-        paint.isAntiAlias = true
-        paint.strokeWidth = 18f
-        paint.style = Paint.Style.STROKE
-        paint.strokeJoin = Paint.Join.BEVEL
-        paint.strokeCap = Paint.Cap.ROUND
+        renderPaint.color = Color.DKGRAY
+        renderPaint.isAntiAlias = true
+        renderPaint.strokeWidth = 18f
+        renderPaint.style = Paint.Style.STROKE
+        renderPaint.strokeJoin = Paint.Join.BEVEL
+        renderPaint.strokeCap = Paint.Cap.ROUND
 
-        val width = width.toFloat()
-        val height = height.toFloat()
-
-        // Model (bitmap) size
-        val modelWidth = MODEL_SIZE
-        val modelHeight = MODEL_SIZE
-
-        val scaleW = width / modelWidth
-        val scaleH = height / modelHeight
-
-        var scale = scaleW
-        if (scale > scaleH) {
-            scale = scaleH
-        }
-
-        val newCx = modelWidth * scale / 2
-        val newCy = modelHeight * scale / 2
-        val dx = width / 2 - newCx
-        val dy = height / 2 - newCy
-
-        canvasMatrix.setScale(scale, scale)
-        canvasMatrix.postTranslate(dx, dy)
-        canvasMatrix.invert(invertedCanvasMatrix)
+        processingPaint.color = Color.BLACK
+        processingPaint.isAntiAlias = true
+        processingPaint.strokeWidth = 1f
+        processingPaint.style = Paint.Style.STROKE
+        processingPaint.strokeJoin = Paint.Join.BEVEL
+        processingPaint.strokeCap = Paint.Cap.ROUND
     }
 
     fun getBitmap() : Bitmap {
         val bitmap = Bitmap.createBitmap(MODEL_SIZE, MODEL_SIZE, Bitmap.Config.ARGB_8888)
         val processingCanvas = Canvas(bitmap)
-        processingCanvas.drawPath(path, paint)
+
+        scaleMatrix.setScale(MODEL_SIZE/width.toFloat(), MODEL_SIZE/height.toFloat(), 0f, 0f)
+
+        processingPath.transform(scaleMatrix)
+
+        processingCanvas.save()
+        processingCanvas.drawColor(Color.WHITE)
+        processingCanvas.drawPath(processingPath, processingPaint)
+        processingCanvas.restore()
+
+        processingPath.reset()
+
         return bitmap
     }
 
     override fun onDraw(renderCanvas: Canvas) {
-        renderCanvas.drawPath(path, paint)
+        renderCanvas.drawPath(renderPath, renderPaint)
+        super.onDraw(renderCanvas)
     }
 
     private fun reset() {
         StrokeUtils.reset()
-        path.reset()
+        renderPath.reset()
         postInvalidate()
     }
 
@@ -106,7 +109,7 @@ class DrawingPad(context: Context) : View(context) {
         val y = event.y
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                path.moveTo(x, y)
+                renderPath.moveTo(x, y)
 
                 handler.removeCallbacks(resetRunnable)
 
@@ -114,12 +117,19 @@ class DrawingPad(context: Context) : View(context) {
             }
 
             MotionEvent.ACTION_MOVE -> {
-                path.lineTo(x, y)
+                renderPath.lineTo(x, y)
             }
 
             else -> {
                 // Get bitmap
                 StrokeUtils.addStroke()
+
+                processingPath.set(renderPath)
+
+//                val rectF = RectF()
+//                renderPath.computeBounds(rectF, true)
+//                scaleMatrix.setScale(MODEL_SIZE/rectF.width(), MODEL_SIZE/rectF.height(), 0f, 0f)
+//                renderPath.transform(scaleMatrix)
 
                 if (StrokeUtils.shouldCleanUp()) {
                     reset()

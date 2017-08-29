@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.text.Editable
 import android.text.TextWatcher
-
 import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.RelativeLayout

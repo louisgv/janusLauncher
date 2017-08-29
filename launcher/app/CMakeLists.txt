@@ -16,16 +16,16 @@ add_library( # Sets the name of the library.
              # Sets the library as a shared library.
              SHARED
 
-             # Provides a relative path to your source file(s).
+             # Provides a relative renderPath to your source file(s).
              src/main/cpp/native-lib.cpp )
 
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
+# Searches for a specified prebuilt library and stores the renderPath as a
+# variable. Because CMake includes system libraries in the search renderPath by
 # default, you only need to specify the name of the public NDK library
 # you want to add. CMake verifies that the library exists before
 # completing its build.
 
-find_library( # Sets the name of the path variable.
+find_library( # Sets the name of the renderPath variable.
               log-lib
 
               # Specifies the name of the NDK library that
