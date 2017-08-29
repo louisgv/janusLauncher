@@ -8,9 +8,6 @@ import java.io.IOException
 import java.io.InputStreamReader
 import java.util.*
 
-
-
-
 /**
  * Created by jojo on 8/23/17.
  */
@@ -18,7 +15,7 @@ import java.util.*
 class TensorFlowEMNISTClassifier(assetManager: AssetManager,
                                  modelFilename: String,
                                  labelFilename: String,
-                                 private val inputSize: Int,
+                                 inputSize: Int,
                                  private val inputName: String,
                                  private val outputName: String) : Classifier {
     private val TAG = "TensorFlowEMNIST"
@@ -26,7 +23,7 @@ class TensorFlowEMNISTClassifier(assetManager: AssetManager,
     private var logStats = false
 
     private val MAX_RESULTS = 3
-    private val THRESHOLD = 0.1f
+    private val THRESHOLD = 0.016f
 
     private val inferenceInterface = TensorFlowInferenceInterface(assetManager, modelFilename)
 
@@ -87,12 +84,9 @@ class TensorFlowEMNISTClassifier(assetManager: AssetManager,
                     java.lang.Float.compare(rhs.confidence!!, lhs.confidence!!)
                 })
 
-        (0 until outputs.size)
-                .asSequence()
-                .filter { outputs[it] > THRESHOLD }
-                .mapTo(pq) {
-                    Recognition(
-                            "" + it, if (labels.size > it) labels[it] else "unknown", outputs[it])
+        outputs.filter { o -> o > THRESHOLD }
+                .mapIndexedTo(pq) {
+                    i, o -> Recognition(o.toString(), if (labels.size > i) labels[i] else "", o)
                 }
 
         return (0 until Math.min(pq.size, MAX_RESULTS))

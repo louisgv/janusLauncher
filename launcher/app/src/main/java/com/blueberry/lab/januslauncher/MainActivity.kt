@@ -1,5 +1,6 @@
 package com.blueberry.lab.januslauncher
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.text.Editable
@@ -12,7 +13,8 @@ import org.jetbrains.anko.uiThread
 import java.util.*
 
 
-class MainActivity : FragmentActivity() {
+class MainActivity : FragmentActivity(), DrawingPad.EventListener {
+    private val TAG = "MainActivity"
 
     private val RESET_INTERVAL = 1800L
 
@@ -42,6 +44,7 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         pad = DrawingPad(this.applicationContext, INPUT_SIZE, RESET_INTERVAL)
+        pad.listener = this
         addContentView(pad, padParams)
 
         appListFragment = fragmentManager.findFragmentById(R.id.app_list) as AppListFragment
@@ -60,6 +63,10 @@ class MainActivity : FragmentActivity() {
         )
     }
 
+    override fun onReset() {
+        recognizeDrawing()
+    }
+
     private fun onQueryChanged(query: String) {
         if (previousQuery.isEmpty() && stackOfFilteredListOfAppModels.isEmpty()) {
             stackOfFilteredListOfAppModels.push(appListFragment.listOfAppModels)
@@ -72,8 +79,12 @@ class MainActivity : FragmentActivity() {
                         .sortedWith(compareBy { appModel -> -appModel.label.indexOf(query) })
             )
         } else {
-            stackOfFilteredListOfAppModels.pop()
-            stackOfFilteredListOfAppModels.peek()
+            val tmpStack = stackOfFilteredListOfAppModels.pop()
+            if (stackOfFilteredListOfAppModels.isEmpty()) {
+                tmpStack
+            } else {
+                stackOfFilteredListOfAppModels.peek()
+            }
         }
 
         previousQuery = query
@@ -81,6 +92,20 @@ class MainActivity : FragmentActivity() {
         appListFragment.appListAdapter.setData(filteredListOfAppModels)
     }
 
+    fun recognizeDrawing() {
+        doAsync {
+            val results = classifier.recognizeImage(pad.getBitmap())
+
+            val bestPredicted = results[0].title
+            uiThread {
+                val query = previousQuery + bestPredicted;
+                appListQueryEdit.setText(query)
+                appListQueryEdit.setSelection(appListQueryEdit.text.length)
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         pad.onDrawing(event)
 
@@ -90,19 +115,7 @@ class MainActivity : FragmentActivity() {
             MotionEvent.ACTION_MOVE -> {
                 return false
             }
-
-            MotionEvent.ACTION_UP -> {
-                doAsync {
-                    val results = classifier.recognizeImage(pad.getBitmap())
-
-                    val bestPredicted = results[0].title
-                    uiThread {
-                        onQueryChanged(previousQuery + bestPredicted)
-                    }
-                }
-            }
         }
-
         return originalResult
     }
 

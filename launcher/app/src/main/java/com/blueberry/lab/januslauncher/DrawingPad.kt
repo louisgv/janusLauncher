@@ -14,10 +14,8 @@ import android.view.View
  * Created by jojo on 8/11/17.
  */
 
-class DrawingPad(context: Context, val modelSize: Int = 28, val resetInterval: Long = 1800) : View(context) {
+class DrawingPad(context: Context,private val modelSize: Int = 28, private val resetInterval: Long = 1800) : View(context) {
 
-    private val canvasMatrix = Matrix()
-    private val invertedCanvasMatrix = Matrix()
     private val scaleMatrix = Matrix()
 
     private val resetRunnable = Runnable {
@@ -43,12 +41,17 @@ class DrawingPad(context: Context, val modelSize: Int = 28, val resetInterval: L
         }
     }
 
+    interface EventListener {
+        fun onReset()
+    }
+
+    lateinit var listener : EventListener
+
     private val renderPath = Path()
     private val renderPaint = Paint()
 
     private val processingPath = Path()
     private val processingPaint = Paint()
-
 
     init {
         isClickable = false
@@ -98,10 +101,11 @@ class DrawingPad(context: Context, val modelSize: Int = 28, val resetInterval: L
     private fun reset() {
         StrokeUtils.reset()
         renderPath.reset()
-        postInvalidate()
+        invalidate()
+        listener.onReset()
     }
 
-    fun onDrawing(event: MotionEvent?) {
+    fun onDrawing(event: MotionEvent?) : Boolean {
         val x = event!!.x
         val y = event.y
         when (event.action) {
@@ -123,16 +127,16 @@ class DrawingPad(context: Context, val modelSize: Int = 28, val resetInterval: L
 
                 processingPath.set(renderPath)
 
-//                val rectF = RectF()
-//                renderPath.computeBounds(rectF, true)
-//                scaleMatrix.setScale(modelSize/rectF.width(), modelSize/rectF.height(), 0f, 0f)
-//                renderPath.transform(scaleMatrix)
-
                 if (StrokeUtils.shouldCleanUp()) {
                     reset()
                 }
             }
         }
-        postInvalidate()
+        invalidate()
+        return false
     }
+}
+
+interface ResetListener {
+
 }
