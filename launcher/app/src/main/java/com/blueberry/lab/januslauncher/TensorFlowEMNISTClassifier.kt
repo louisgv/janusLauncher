@@ -9,6 +9,8 @@ import java.io.InputStreamReader
 import java.util.*
 
 
+
+
 /**
  * Created by jojo on 8/23/17.
  */
@@ -16,9 +18,7 @@ import java.util.*
 class TensorFlowEMNISTClassifier(assetManager: AssetManager,
                                  modelFilename: String,
                                  labelFilename: String,
-                                 inputSize: Int,
-                                 private val imageMean: Int,
-                                 private val imageStd: Float,
+                                 private val inputSize: Int,
                                  private val inputName: String,
                                  private val outputName: String) : Classifier {
     private val TAG = "TensorFlowEMNIST"
@@ -31,10 +31,7 @@ class TensorFlowEMNISTClassifier(assetManager: AssetManager,
     private val inferenceInterface = TensorFlowInferenceInterface(assetManager, modelFilename)
 
     // Pre-allocated buffers.
-    private val inputSizeSqrt = inputSize * inputSize
     private val labels = Vector<String>()
-    private val intValues = IntArray(inputSizeSqrt)
-    private val floatValues = FloatArray(inputSizeSqrt * 3)
 
     private val operation = inferenceInterface.graphOperation(outputName)
     private val numClasses = operation.output(0).shape().size(1).toInt()
@@ -43,7 +40,7 @@ class TensorFlowEMNISTClassifier(assetManager: AssetManager,
 
     private val outputNames = arrayOf(outputName)
 
-    private val networkStructure = longArrayOf(1, inputSize.toLong(), inputSize.toLong(), 3)
+    private val networkStructure = longArrayOf(1, inputSize.toLong(), inputSize.toLong(), 1)
 
     init {
         val br: BufferedReader?
@@ -75,17 +72,9 @@ class TensorFlowEMNISTClassifier(assetManager: AssetManager,
     }
 
     override fun recognizeImage(bitmap: Bitmap): List<Recognition> {
-        bitmap.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        val pixels = getPixelData(bitmap)
 
-        intValues.foldIndexed(intValues.size) { i, _, v ->
-            val fi = i * 3
-            floatValues[fi] = ((v shr 16 and 0xFF) - imageMean) / imageStd
-            floatValues[fi + 1] = ((v shr 8 and 0xFF) - imageMean) / imageStd
-            floatValues[fi + 2] = ((v and 0xFF) - imageMean) / imageStd
-            9
-        }
-
-        inferenceInterface.feed(inputName, floatValues, *networkStructure)
+        inferenceInterface.feed(inputName, pixels, *networkStructure)
 
         inferenceInterface.run(outputNames, logStats)
 
@@ -111,4 +100,24 @@ class TensorFlowEMNISTClassifier(assetManager: AssetManager,
                     pq.poll()
                 }
     }
+
+    private fun getPixelData(bitmap: Bitmap): FloatArray {
+        val width = bitmap.width
+        val height = bitmap.height
+
+        // Get 28x28 pixel data from bitmap
+        val pixels = IntArray(width * height)
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
+
+        val retPixels = FloatArray(pixels.size)
+        for (i in pixels.indices) {
+            // Set 0 for white and 255 for black pixel
+            val pix = pixels[i]
+            val b = pix and 0xff
+            retPixels[i] = ((0xff - b) / 255.0).toFloat()
+        }
+
+        return retPixels
+    }
+
 }

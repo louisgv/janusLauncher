@@ -59,7 +59,8 @@ Follow this guide: [link](https://help.github.com/articles/connecting-to-github-
 
 ## References:
 
-+ [TensorFlowAndroidMNIST](https://github.com/miyosuda/TensorFlowAndroidMNIST)
++ [@mari-linhares's mnist-android-tensorflow](https://github.com/mari-linhares/mnist-android-tensorflow)
++ [@miyosuda's TensorFlowAndroidMNIST](https://github.com/miyosuda/TensorFlowAndroidMNIST)
 + [Keras Pull request on exporting a model](https://github.com/fchollet/keras/pull/6074/files)
 + [Keras API guide](https://keras.io/getting-started/functional-api-guide/)
 + [Generate alphabet codegolf](https://codegolf.stackexchange.com/questions/15882/generate-alphabet-with-4-copies-of-each-letter)

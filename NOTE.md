@@ -212,24 +212,29 @@ Turned out, the consuming code from the Android side does shed some light on thi
 
 # Finding the input node and output node name of a TF model
 
-This is quite tricky. After several trial and realization, the steps are as follow:
-First when constructing the model, name the input and output so that it is easier to identify them. In janus, input are named `main_input` and output `main_output`
-
-Now, after the model has been trained, the input name will stays intact, but the output name will be modified, and you will have to search for it. Look at the very last operator of the model. For janus, it is
+After exporting the model using the export_inference notebook, the summarize_graph tool should tell us the one input and output pair needed.
 
 ```
-output = kl.Dense(nb_classes, activation='softmax', name='main_output')(hidden)
+~/src/tensorflow/bazel-bin/tensorflow/tools/graph_transforms/summarize_graph --in_graph=inference_graph.pb
+
+Found 1 possible inputs: (name=main_input, type=float(1), shape=[?,28,28,1])
+No variables spotted.
+Found 1 possible outputs: (name=main_output/Softmax, op=Softmax)
+Found 2401196 (2.40M) const parameters, 0 (0) variable parameters, and 8 control_edges
+Op types used: 22 Const, 16 Identity, 6 Mul, 4 BiasAdd, 4 Add, 3 Shape, 3 Relu, 2 Sub, 2 RealDiv, 2 RandomUniform, 2 Merge, 2 MatMul, 2 Floor, 2 Conv2D, 1 Pack, 1 Placeholder, 1 Prod, 1 MaxPool, 1 Reshape, 1 Softmax, 1 StridedSlice
+To use with tensorflow/tools/benchmark:benchmark_model try these arguments:
+bazel run tensorflow/tools/benchmark:benchmark_model -- --graph=inference_graph.pb --show_flops --input_layer=main_input --input_layer_type=float --input_layer_shape=-1,28,28,1 --output_layer=main_output/Softmax
 ```
 
-The operator is Dense, but the activation function is softmax. In order to use the `transform_graph` program with the model, we need to find the name of this node. If you outputed the graph.pbtxt you are in luck. Since it is just a giant json file, grepping it for the output node is doable. However, doing so will only give you instances of the `main_output` string, but not the name of the node.
-
-In order to find node name, simply `grep name` like so:
-```sh
-cd model/freeze
-cat graph.pbtxt | grep name
+Then run transform graph to optimize it further
 ```
-
-The output will be a list of node name. Now you will just need to find a node with a name related to main_output with softmax. For Janus, it is indeed `main_output/Softmax`
+~/src/tensorflow/bazel-bin/tensorflow/tools/graph_transforms/transform_graph \                            
+	--in_graph=inference_graph.pb \
+	--out_graph=opt_graph.pb \
+	--inputs='main_input' \
+	--outputs='main_output/Softmax' \
+	--transforms='strip_unused_nodes(type=float, shape="1,299,299,3") remove_nodes(op=Identity, op=CheckNumerics) fold_constants(ignore_errors=true) fold_batch_norms fold_old_batch_norms'
+```
 
 # Converting the model to be usable on Mobile
 

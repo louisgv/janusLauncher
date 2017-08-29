@@ -14,11 +14,9 @@ import java.util.*
 
 class MainActivity : FragmentActivity() {
 
-    private val MODEL_SIZE = 28
     private val RESET_INTERVAL = 1800L
-    private val INPUT_SIZE = 224
-    private val IMAGE_MEAN = 117
-    private val IMAGE_STD = 1f
+
+    private val INPUT_SIZE = 28
     private val INPUT_NAME = "main_input"
     private val OUTPUT_NAME = "main_output/Softmax"
 
@@ -43,7 +41,7 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        pad = DrawingPad(this.applicationContext, MODEL_SIZE, RESET_INTERVAL)
+        pad = DrawingPad(this.applicationContext, INPUT_SIZE, RESET_INTERVAL)
         addContentView(pad, padParams)
 
         appListFragment = fragmentManager.findFragmentById(R.id.app_list) as AppListFragment
@@ -57,8 +55,6 @@ class MainActivity : FragmentActivity() {
                 MODEL_FILE,
                 LABEL_FILE,
                 INPUT_SIZE,
-                IMAGE_MEAN,
-                IMAGE_STD,
                 INPUT_NAME,
                 OUTPUT_NAME
         )
