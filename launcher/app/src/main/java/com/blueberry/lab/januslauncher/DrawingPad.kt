@@ -14,10 +14,7 @@ import android.view.View
  * Created by jojo on 8/11/17.
  */
 
-class DrawingPad(context: Context) : View(context) {
-    private val RESET_INTERVAL: Long = 1800
-
-    private val MODEL_SIZE = 28
+class DrawingPad(context: Context, val modelSize: Int = 28, val resetInterval: Long = 1800) : View(context) {
 
     private val canvasMatrix = Matrix()
     private val invertedCanvasMatrix = Matrix()
@@ -76,10 +73,10 @@ class DrawingPad(context: Context) : View(context) {
     }
 
     fun getBitmap() : Bitmap {
-        val bitmap = Bitmap.createBitmap(MODEL_SIZE, MODEL_SIZE, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(modelSize, modelSize, Bitmap.Config.ARGB_8888)
         val processingCanvas = Canvas(bitmap)
 
-        scaleMatrix.setScale(MODEL_SIZE/width.toFloat(), MODEL_SIZE/height.toFloat(), 0f, 0f)
+        scaleMatrix.setScale(modelSize /width.toFloat(), modelSize /height.toFloat(), 0f, 0f)
 
         processingPath.transform(scaleMatrix)
 
@@ -113,7 +110,7 @@ class DrawingPad(context: Context) : View(context) {
 
                 handler.removeCallbacks(resetRunnable)
 
-                handler.postDelayed(resetRunnable, RESET_INTERVAL)
+                handler.postDelayed(resetRunnable, resetInterval)
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -128,7 +125,7 @@ class DrawingPad(context: Context) : View(context) {
 
 //                val rectF = RectF()
 //                renderPath.computeBounds(rectF, true)
-//                scaleMatrix.setScale(MODEL_SIZE/rectF.width(), MODEL_SIZE/rectF.height(), 0f, 0f)
+//                scaleMatrix.setScale(modelSize/rectF.width(), modelSize/rectF.height(), 0f, 0f)
 //                renderPath.transform(scaleMatrix)
 
                 if (StrokeUtils.shouldCleanUp()) {

@@ -230,3 +230,5 @@ cat graph.pbtxt | grep name
 ```
 
 The output will be a list of node name. Now you will just need to find a node with a name related to main_output with softmax. For Janus, it is indeed `main_output/Softmax`
+
+TODO: REMOVE FUCKING BATCH  NORMALIZATION!

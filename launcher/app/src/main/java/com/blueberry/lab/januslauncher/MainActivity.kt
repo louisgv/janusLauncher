@@ -14,10 +14,12 @@ import java.util.*
 
 class MainActivity : FragmentActivity() {
 
+    private val MODEL_SIZE = 28
+    private val RESET_INTERVAL = 1800L
     private val INPUT_SIZE = 224
     private val IMAGE_MEAN = 117
     private val IMAGE_STD = 1f
-    private val INPUT_NAME = "main_input"
+    private val INPUT_NAME = "batch_normalization_1/keras_learning_phase"
     private val OUTPUT_NAME = "main_output/Softmax"
 
     private val MODEL_FILE = "file:///android_asset/graph.pb"
@@ -41,7 +43,7 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        pad = DrawingPad(this.applicationContext)
+        pad = DrawingPad(this.applicationContext, MODEL_SIZE, RESET_INTERVAL)
         addContentView(pad, padParams)
 
         appListFragment = fragmentManager.findFragmentById(R.id.app_list) as AppListFragment
